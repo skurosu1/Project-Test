@@ -1,4 +1,6 @@
 import pandas as pd
+import tkinter as tk
+from tkinter import ttk
 
 # Set pandas display options to show all rows AND all columns
 pd.set_option('display.max_rows', None)  # Show all rows
@@ -17,5 +19,18 @@ df['combined'] = df['productSKU'].astype(str).str.strip() + '--' + df['name'].as
 selected_columns = ['combined', 'ratio', 'stockLevel'] 
 df_selected = df[selected_columns]
 
-# Display the DataFrame
-print(df_selected)
+# Create a GUI window
+root = tk.Tk()
+root.title("Test recon")
+
+# Create Treeview
+tree = ttk.Treeview(root, columns=list(df_selected.columns), show='headings')
+tree.pack(expand=True, fill="both")
+
+for col in df_selected.columns:
+    tree.heading(col, text=col)
+
+for row in df_selected.to_numpy().tolist():
+    tree.insert("", "end", values=row)
+
+root.mainloop()
